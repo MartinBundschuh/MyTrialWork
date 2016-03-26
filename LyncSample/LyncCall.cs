@@ -3,7 +3,6 @@ using Microsoft.Lync.Model.Extensibility;
 using System;
 using System.Collections.Generic;
 using System.Net.Mail;
-using System.Data.Entity;
 using System.Threading.Tasks;
 
 namespace LyncSample
@@ -13,6 +12,9 @@ namespace LyncSample
     /// </summary>
     public static class LyncCall
     {
+        private static LyncClient lyncClient = LyncClient.GetClient();
+        public static bool IsSignedIn = lyncClient != null && lyncClient.State == ClientState.SignedIn;
+        
         #region Call Lync-registered contact(s)
         /// <summary>
         /// Starts a phone call with one or more Lync-registered contacts.
@@ -101,9 +103,8 @@ namespace LyncSample
         private static void StartCall(List<string> participants)
         {
             try
-            {
-                var lyncCLient = LyncClient.GetClient();
-                if (lyncCLient == null || lyncCLient.State != ClientState.SignedIn)
+            {              
+                if (!IsSignedIn)
                     throw new NoSuccessfulCallException("Call not possible: Client is not signed in.");               
                 
                 var automation = LyncClient.GetAutomation();
@@ -111,7 +112,7 @@ namespace LyncSample
 
                 Parallel.ForEach(participants, uri =>
                     {
-                        LogCall(lyncCLient, uri);
+                        LogCall(uri);
                     });
             }
             catch (Exception e)
@@ -120,7 +121,7 @@ namespace LyncSample
             }
         }
 
-        private static void LogCall(LyncClient lyncClient, string uri)
+        private static void LogCall(string uri)
         {
             var callHistory = new CallHistory
             {
