@@ -103,8 +103,7 @@ namespace LyncSample
         /// </summary>
         /// <param name="number">Number, Format: 6886000.</param>
         public void SetNumber(int number)
-        {
-            
+        {            
             if (number > 0)
                 Number = number;
         }
