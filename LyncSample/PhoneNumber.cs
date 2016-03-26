@@ -143,7 +143,7 @@ namespace LyncSample
         /// Returns the whole Phonenumber, Format +44 (0)44 - 6886000.
         /// </summary>
         /// <returns>Frmatted and complete Phonenumber.</returns>
-        public string ToString()
+        public override string ToString()
         {
             try
             {
