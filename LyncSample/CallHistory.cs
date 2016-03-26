@@ -11,12 +11,14 @@ namespace LyncSample
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     
     public partial class CallHistory
     {
         public int Id { get; set; }
         public System.DateTime Date { get; set; }
-        public int CallFromId { get; set; }
-        public int CallToId { get; set; }
+        public string CallFrom { get; set; }
+        public string CallTo { get; set; }
+        public bool IsIntern { get; set; }
     }
 }

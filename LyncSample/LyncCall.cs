@@ -3,6 +3,8 @@ using Microsoft.Lync.Model.Extensibility;
 using System;
 using System.Collections.Generic;
 using System.Net.Mail;
+using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace LyncSample
 {
@@ -23,13 +25,13 @@ namespace LyncSample
 
             var contactMailAddressesString = new List<string>();
 
-            foreach (var sip in contactMailAddresses)
-            {
-                if (sip == null)
-                    throw new InvalidEMailException("Invalid Argument: Empty E-Mail addresss.");
+            Parallel.ForEach(contactMailAddresses, sip =>
+                {
+                    if (sip == null)
+                        throw new InvalidEMailException("Invalid Argument: Empty E-Mail addresss.");
 
-                contactMailAddressesString.Add(sip.ToString().Insert(0, "sip:"));                
-            }
+                    contactMailAddressesString.Add(sip.ToString().Insert(0, "sip:"));
+                });
 
             try
             {
@@ -65,13 +67,13 @@ namespace LyncSample
 
             var phoneNumbersString = new List<string>();
 
-            foreach (var tel in phoneNumbers)
-            {
-                if (tel == null)
-                    throw new InvalidPhoneNumberException("Invalid Argment: Phonenumber is empty.");
+            Parallel.ForEach(phoneNumbers, tel =>
+                {
+                    if (tel == null)
+                        throw new InvalidPhoneNumberException("Invalid Argment: Phonenumber is empty.");
 
-                phoneNumbersString.Add(tel.ToLync());
-            }
+                    phoneNumbersString.Add(tel.ToLync());
+                });
 
             try
             {
@@ -95,17 +97,45 @@ namespace LyncSample
         }
         #endregion
 
+        #region Call and Logging
         private static void StartCall(List<string> participants)
         {
             try
             {
+                var lyncCLient = LyncClient.GetClient();
+                if (lyncCLient == null || lyncCLient.State != ClientState.SignedIn)
+                    throw new NoSuccessfulCallException("Call not possible: CLient is not signed in.");               
+                
                 var automation = LyncClient.GetAutomation();
                 automation.BeginStartConversation(AutomationModalities.Audio, participants, null, null, automation);
+
+                Parallel.ForEach(participants, uri =>
+                    {
+                        LogCall(lyncCLient, uri);
+                    });
             }
             catch (Exception e)
             {
                 throw new NoSuccessfulCallException(e.Message, e.InnerException);
             }
         }
+
+        private static void LogCall(LyncClient lyncClient, string uri)
+        {
+            var callHistory = new CallHistory
+            {
+                CallFrom = lyncClient.Uri,
+                CallTo = uri,
+                Date = DateTime.Now,
+                IsIntern = lyncClient.ContactManager.GetContactByUri(uri) == null
+            };
+
+            using (var callHistoryLog = new LyncCallLogging())
+            {
+                callHistoryLog.CallHistory.Add(callHistory);
+                callHistoryLog.SaveChangesAsync();
+            }
+        }
+        #endregion
     }
 }

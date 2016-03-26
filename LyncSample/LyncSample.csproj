@@ -57,60 +57,55 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallHistory.cs">
-      <DependentUpon>CallLoggingModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CallLoggingModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CallLoggingModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CallLoggingModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CallLoggingModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CallLoggingModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CallLoggingModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Contact.cs">
-      <DependentUpon>CallLoggingModel.tt</DependentUpon>
+      <DependentUpon>LyncCallLogging.tt</DependentUpon>
     </Compile>
     <Compile Include="InvalidEMailException.cs" />
     <Compile Include="InvalidPhoneNumberException.cs" />
     <Compile Include="LyncCall.cs" />
+    <Compile Include="LyncCallLogging.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LyncCallLogging.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LyncCallLogging.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LyncCallLogging.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LyncCallLogging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LyncCallLogging.edmx</DependentUpon>
+    </Compile>
     <Compile Include="NoSuccessfulCallException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PhoneNumber.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="CallLoggingModel.edmx">
+    <EntityDeploy Include="LyncCallLogging.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CallLoggingModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>LyncCallLogging.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
-    <None Include="CallLoggingModel.edmx.diagram">
-      <DependentUpon>CallLoggingModel.edmx</DependentUpon>
+    <None Include="LyncCallLogging.edmx.diagram">
+      <DependentUpon>LyncCallLogging.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CallLoggingModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CallLoggingModel.edmx</DependentUpon>
-      <LastGenOutput>CallLoggingModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="CallLoggingModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CallLoggingModel.edmx</DependentUpon>
-      <LastGenOutput>CallLoggingModel.cs</LastGenOutput>
-    </Content>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Content Include="LyncCallLogging.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LyncCallLogging.edmx</DependentUpon>
+      <LastGenOutput>LyncCallLogging.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="LyncCallLogging.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LyncCallLogging.edmx</DependentUpon>
+      <LastGenOutput>LyncCallLogging.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

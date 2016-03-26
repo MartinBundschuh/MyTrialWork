@@ -11,13 +11,15 @@ warning 6002: The table/view 'LyncCall.Logging.dbo.CallHistory' does not have a 
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Date" />
-            <PropertyRef Name="CallFromId" />
-            <PropertyRef Name="CallToId" />
+            <PropertyRef Name="CallFrom" />
+            <PropertyRef Name="CallTo" />
+            <PropertyRef Name="IsIntern" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
-          <Property Name="CallFromId" Type="int" Nullable="false" />
-          <Property Name="CallToId" Type="int" Nullable="false" />
+          <Property Name="CallFrom" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="CallTo" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="IsIntern" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'LyncCall.Logging.dbo.Contact' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -40,8 +42,9 @@ warning 6002: The table/view 'LyncCall.Logging.dbo.Contact' does not have a prim
             <DefiningQuery>SELECT 
     [CallHistory].[Id] AS [Id], 
     [CallHistory].[Date] AS [Date], 
-    [CallHistory].[CallFromId] AS [CallFromId], 
-    [CallHistory].[CallToId] AS [CallToId]
+    [CallHistory].[CallFrom] AS [CallFrom], 
+    [CallHistory].[CallTo] AS [CallTo], 
+    [CallHistory].[IsIntern] AS [IsIntern]
     FROM [dbo].[CallHistory] AS [CallHistory]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="Contact" EntityType="Self.Contact" store:Type="Tables" store:Schema="dbo">
@@ -63,13 +66,15 @@ warning 6002: The table/view 'LyncCall.Logging.dbo.Contact' does not have a prim
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Date" />
-            <PropertyRef Name="CallFromId" />
-            <PropertyRef Name="CallToId" />
+            <PropertyRef Name="CallFrom" />
+            <PropertyRef Name="CallTo" />
+            <PropertyRef Name="IsIntern" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CallFromId" Type="Int32" Nullable="false" />
-          <Property Name="CallToId" Type="Int32" Nullable="false" />
+          <Property Name="CallFrom" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CallTo" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsIntern" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Contact">
           <Key>
@@ -85,27 +90,28 @@ warning 6002: The table/view 'LyncCall.Logging.dbo.Contact' does not have a prim
           <Property Name="EMailAddress" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="CallLoggingCntext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CallHistories" EntityType="Self.CallHistory" />
-          <EntitySet Name="Contacts" EntityType="Self.Contact" />
+        <EntityContainer Name="LyncCallLoggng" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CallHistory" EntityType="Self.CallHistory" />
+          <EntitySet Name="Contact" EntityType="Self.Contact" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="LyncCallLoggingModelStoreContainer" CdmEntityContainer="CallLoggingCntext">
-          <EntitySetMapping Name="CallHistories">
+        <EntityContainerMapping StorageEntityContainer="LyncCallLoggingModelStoreContainer" CdmEntityContainer="LyncCallLoggng">
+          <EntitySetMapping Name="CallHistory">
             <EntityTypeMapping TypeName="LyncCall.LoggingModel.CallHistory">
               <MappingFragment StoreEntitySet="CallHistory">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="CallFromId" ColumnName="CallFromId" />
-                <ScalarProperty Name="CallToId" ColumnName="CallToId" />
+                <ScalarProperty Name="CallFrom" ColumnName="CallFrom" />
+                <ScalarProperty Name="CallTo" ColumnName="CallTo" />
+                <ScalarProperty Name="IsIntern" ColumnName="IsIntern" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Contacts">
+          <EntitySetMapping Name="Contact">
             <EntityTypeMapping TypeName="LyncCall.LoggingModel.Contact">
               <MappingFragment StoreEntitySet="Contact">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -130,7 +136,7 @@ warning 6002: The table/view 'LyncCall.Logging.dbo.Contact' does not have a prim
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

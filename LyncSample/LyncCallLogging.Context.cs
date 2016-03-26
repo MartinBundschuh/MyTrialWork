@@ -13,10 +13,10 @@ namespace LyncSample
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class CallLoggingCntext : DbContext
+    public partial class LyncCallLogging : DbContext
     {
-        public CallLoggingCntext()
-            : base("name=CallLoggingCntext")
+        public LyncCallLogging()
+            : base("name=LyncCallLogging")
         {
         }
     
@@ -25,7 +25,6 @@ namespace LyncSample
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<CallHistory> CallHistories { get; set; }
-        public virtual DbSet<Contact> Contacts { get; set; }
+        public virtual DbSet<CallHistory> CallHistory { get; set; }
     }
 }
