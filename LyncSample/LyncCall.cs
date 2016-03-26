@@ -104,7 +104,7 @@ namespace LyncSample
             {
                 var lyncCLient = LyncClient.GetClient();
                 if (lyncCLient == null || lyncCLient.State != ClientState.SignedIn)
-                    throw new NoSuccessfulCallException("Call not possible: CLient is not signed in.");               
+                    throw new NoSuccessfulCallException("Call not possible: Client is not signed in.");               
                 
                 var automation = LyncClient.GetAutomation();
                 automation.BeginStartConversation(AutomationModalities.Audio, participants, null, null, automation);
@@ -116,7 +116,7 @@ namespace LyncSample
             }
             catch (Exception e)
             {
-                throw new NoSuccessfulCallException(e.Message, e.InnerException);
+                throw new NoSuccessfulCallException("Call not possible: Lync is not started.", e.InnerException);
             }
         }
 
@@ -127,7 +127,7 @@ namespace LyncSample
                 CallFrom = lyncClient.Uri,
                 CallTo = uri,
                 Date = DateTime.Now,
-                IsIntern = lyncClient.ContactManager.GetContactByUri(uri) == null
+                IsIntern = lyncClient.ContactManager.GetContactByUri(uri) != null
             };
 
             using (var callHistoryLog = new LyncCallLogging())

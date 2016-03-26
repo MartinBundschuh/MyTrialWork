@@ -9,7 +9,7 @@ namespace LyncSample
     /// <summary>
     /// Exception used if the Lync-Call couldnt be proceeded.
     /// </summary>
-    class NoSuccessfulCallException : Exception
+    public class NoSuccessfulCallException : Exception
     {
         public NoSuccessfulCallException() { }
 

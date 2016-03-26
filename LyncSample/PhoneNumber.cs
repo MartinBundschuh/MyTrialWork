@@ -54,7 +54,7 @@ namespace LyncSample
                     throw new NoSuccessfulCallException("TelefonNr Instance Error: Phone number is empty.");
 
                 PhoneNumberStringSave = phoneNumber;
-                PhoneNumberString = PhoneNumberStringSave.Replace("(", string.Empty).Replace(")", string.Empty).Replace("/", string.Empty).Replace("-", string.Empty).Trim();
+                PhoneNumberString = phoneNumber.Replace("(", string.Empty).Replace(")", string.Empty).Replace("/", string.Empty).Replace("-", string.Empty).Trim();
 
                 if (string.IsNullOrWhiteSpace(PhoneNumberString))
                     throw new NoSuccessfulCallException("TelefonNr Instance Error: Phone number is empty.");
@@ -82,7 +82,7 @@ namespace LyncSample
         /// Sets the Internatonal Area Code.
         /// </summary>
         /// <param name="areaCodeInternational">International area code, Format: 0041 or 41 (CH).</param>
-        public void SetVorwahlLand(int areaCodeInternational)
+        public void SetAreaCodeInternational(int areaCodeInternational)
         {
             if (areaCodeInternational > 0)
                 AreaCodeInternational = areaCodeInternational;
@@ -92,7 +92,7 @@ namespace LyncSample
         /// Sets the area code.
         /// </summary>
         /// <param name="areaCode">Area Code, Format: 044 or 44 (Zürich, CH).</param>
-        public void SetVorwahlOrt(int areaCode)
+        public void SetAreaCode(int areaCode)
         {
             if (areaCode > 0)
                 AreaCode = areaCode;            
@@ -102,7 +102,7 @@ namespace LyncSample
         /// Setzt die TelefonNr (ohne (Länder-)Vorwahl !)
         /// </summary>
         /// <param name="number">Number, Format: 6886000.</param>
-        public void SetNr(int number)
+        public void SetNumber(int number)
         {
             
             if (number > 0)
@@ -133,7 +133,7 @@ namespace LyncSample
         /// Returns the phoneNumber without international- / area code.
         /// </summary>
         /// <returns>Simple Phone Number.</returns>
-        public int getNr()
+        public int GetNumber()
         {
             return Number;
         }

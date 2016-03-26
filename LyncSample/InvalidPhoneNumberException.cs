@@ -9,7 +9,7 @@ namespace LyncSample
     /// <summary>
     /// Exception used if the given Phonenumber is not valid.
     /// </summary>
-    class InvalidPhoneNumberException : Exception
+    public class InvalidPhoneNumberException : Exception
     {
         public InvalidPhoneNumberException() { }
 

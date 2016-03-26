@@ -9,7 +9,7 @@ namespace LyncSample
     /// <summary>
     /// Exception used if the given E-Mail Contact is not valid.
     /// </summary>
-    class InvalidEMailException : Exception
+    public class InvalidEMailException : Exception
     {
         public InvalidEMailException() { }
 
