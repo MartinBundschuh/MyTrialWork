@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LyncSample\LyncSample.Data.csproj">
+    <ProjectReference Include="..\LyncSample.Data\LyncSample.Data.csproj">
       <Project>{41BE0D47-6B68-44BF-8897-5B6C7BF098F4}</Project>
       <Name>LyncSample.Data</Name>
     </ProjectReference>
