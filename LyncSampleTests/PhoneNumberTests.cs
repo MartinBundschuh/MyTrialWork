@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LyncSample;
+using LyncSample.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace LyncSample.Tests
         {
             var phoneNumber = new PhoneNumber(44, 6806000);
 
-            Assert.AreEqual(true, phoneNumber != null);
+            Assert.IsTrue(phoneNumber != null);
         }
 
         [TestMethod()]

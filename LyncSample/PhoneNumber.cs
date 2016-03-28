@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LyncSample
+namespace LyncSample.Data
 {
     /// <summary>
     /// Phonenumber, wich you can use to start an intern/extern Lync-Call.

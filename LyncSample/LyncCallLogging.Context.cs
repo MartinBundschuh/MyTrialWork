@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LyncSample
+namespace LyncSample.Data
 {
     using System;
     using System.Data.Entity;
@@ -16,7 +16,7 @@ namespace LyncSample
     public partial class LyncCallLogging : DbContext
     {
         public LyncCallLogging()
-            : base("name=LyncCallLogging")
+            : base("name=LyncCallLoggng")
         {
         }
     
@@ -26,5 +26,6 @@ namespace LyncSample
         }
     
         public virtual DbSet<CallHistory> CallHistory { get; set; }
+        public virtual DbSet<Contact> Contact { get; set; }
     }
 }

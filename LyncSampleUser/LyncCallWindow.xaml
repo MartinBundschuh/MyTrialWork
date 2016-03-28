@@ -1,0 +1,51 @@
+﻿<Window x:Class="LyncSample.UI.LyncCallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LyncSampleUser"
+        mc:Ignorable="d"
+        Title="Lync-Call"
+        Height="102.595"
+        Width="563.965">
+    <Grid HorizontalAlignment="Left"
+          Height="Auto"
+          VerticalAlignment="Top"
+          Width="Auto"
+          Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Row="0"
+                 Grid.Column="0"
+                 x:Name="textBoxPhoneNumber"
+                 HorizontalAlignment="Left"
+                 Height="45"
+                 Margin="5,5,5,5"
+                 TextWrapping="Wrap"
+                 Text="{Binding Path=PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Foreground="{Binding Path=ForeGroundColor}"
+                 VerticalAlignment="Top"
+                 Width="405"
+                 FontSize="24"
+                 FontStyle="{Binding Path=FontStyle}"
+                 GotFocus="textBoxPhoneNumber_GotFocus"
+                 LostFocus="textBoxPhoneNumber_LostFocus">
+        </TextBox>
+        <Button Grid.Row="0" Grid.Column="1"
+                x:Name="buttonCall"
+                Content="Call"
+                HorizontalAlignment="Left"
+                Margin="5,5,5,5"
+                VerticalAlignment="Top"
+                Width="101"
+                Height="45"
+                FontSize="24"
+                FontWeight="Bold" 
+                Command="{Binding Path=StartCall}"/>
+    </Grid>
+</Window>

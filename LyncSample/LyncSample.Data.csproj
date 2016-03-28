@@ -7,8 +7,8 @@
     <ProjectGuid>{41BE0D47-6B68-44BF-8897-5B6C7BF098F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LyncSample</RootNamespace>
-    <AssemblyName>LyncSample</AssemblyName>
+    <RootNamespace>LyncSample.Data</RootNamespace>
+    <AssemblyName>LyncSample.Data</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -57,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallHistory.cs">
+      <DependentUpon>LyncCallLogging.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Contact.cs">
       <DependentUpon>LyncCallLogging.tt</DependentUpon>
     </Compile>
     <Compile Include="InvalidEMailException.cs" />

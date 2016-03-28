@@ -12,12 +12,12 @@ namespace LyncSample.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class CallHistory
+    public partial class Contact
     {
         public int Id { get; set; }
-        public System.DateTime Date { get; set; }
-        public string CallFrom { get; set; }
-        public string CallTo { get; set; }
-        public bool IsIntern { get; set; }
+        public string Name { get; set; }
+        public string NameFirst { get; set; }
+        public string EMailAddress { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
