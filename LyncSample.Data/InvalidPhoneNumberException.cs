@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LyncSample.Data
 {
     /// <summary>
-    /// Exception used if the given Phonenumber is not valid.
+    /// Exception used if the given PhoneNumber is not valid.
     /// </summary>
     public class InvalidPhoneNumberException : Exception
     {

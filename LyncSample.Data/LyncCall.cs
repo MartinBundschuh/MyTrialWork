@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace LyncSample.Data
 {
     /// <summary>
-    /// Class wich u can use to start Lync Calls and Conferecnes
+    /// Class which u can use to start Lync Calls and Conferences
     /// </summary>
     public static class LyncCall
     {
