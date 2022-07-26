@@ -3,7 +3,7 @@
 namespace LyncSample.Data
 {
     /// <summary>
-    /// Exception used if the given PhoneNumber is not valid.
+    /// Exception used if the given Phone number is not valid.
     /// </summary>
     public class InvalidPhoneNumberException : Exception
     {

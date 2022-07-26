@@ -40,12 +40,12 @@ public partial class LyncCallViewModel
             {
                 if (exception.GetType() == typeof(InvalidPhoneNumberException))
                 {
-                    // Do Sth.
+                    // Do sth.
                 }
 
                 if (exception.GetType() == typeof(NoSuccessfulCallException))
                 {
-                    // Do Sth else.
+                    // Do sth else.
                 }
             }
         }

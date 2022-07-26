@@ -6,7 +6,7 @@ namespace LyncSample.UI.ViewModel
 {
     public partial class LyncCallViewModel : INotifyPropertyChanged
     {
-        internal const string TextSave = "Enter a phonenumber to start a call";
+        internal const string TextSave = "Enter a phone number to start a call";
         
         private Brush _foregroundColor;
         private FontStyle _fontStyle;

@@ -19,44 +19,43 @@ namespace LyncSample.Data
         /// <summary>
         /// Starts a phone call with one or more Lync-registered contacts.
         /// </summary>
-        /// <param name="contactMailAddresses">E-Mail Adresses of Lync-registered contacts.</param>
-        public static void CallRegisteredUser(List<MailAddress> contactMailAddresses)
+        /// <param name="contactMailAddresses">E-Mail Addresses of Lync-registered contacts.</param>
+        public static void CallRegisteredUser(IReadOnlyCollection<MailAddress> contactMailAddresses)
         {
             if (contactMailAddresses == null || contactMailAddresses.Count == 0)
             {
-                throw new InvalidEMailException("Invalid Argument: No given E-Mail addresses.");
+                throw new ArgumentException($"{nameof(contactMailAddresses)} must not be null or empty");
             }
 
-            var contactMailAddressesString = new List<string>();
+            var contactMailAddresseStrings = new List<string>();
 
-            Parallel.ForEach(contactMailAddresses, sip =>
+            Parallel.ForEach(contactMailAddresses, e =>
             {
-                if (sip == null)
+                if (e == null)
                 {
-                    throw new InvalidEMailException("Invalid Argument: Empty E-Mail addresss.");
+                    throw new InvalidEMailException("Invalid argument: Ee-mail address is null.");
                 }
 
-                contactMailAddressesString.Add(sip.ToString().Insert(0, "sip:"));
+                contactMailAddresseStrings.Add(e.ToString().Insert(0, "sip:"));
             });
 
-            StartCall(contactMailAddressesString);
+            StartCall(contactMailAddresseStrings);
         }
 
         /// <summary>
         /// Starts a Lync Call with a Lync-registered contact.
         /// </summary>
-        /// <param name="contactMailAddress">E-Mail Adress of a Lync registered contact.</param>
-        public static void CallRegisteredUser(MailAddress contactMailAddress)
-        {
-            var kontaktMails = new List<MailAddress>();
-            kontaktMails.Add(contactMailAddress);
-            CallRegisteredUser(kontaktMails);
-        }
+        /// <param name="contactMailAddress">E-mail address of a Lync registered contact.</param>
+        public static void CallRegisteredUser(MailAddress contactMailAddress) =>
+            CallRegisteredUser(new List<MailAddress>
+            {
+                contactMailAddress,
+            });
 
         /// <summary>
-        /// Calls a given phonenumber.
+        /// Calls a given phone number.
         /// </summary>
-        /// <param name="phoneNumber">Phonenumber you wat to call.</param>
+        /// <param name="phoneNumber">Phone number you wat to call.</param>
         public static void Call(PhoneNumber phoneNumber) =>
             Call(new List<PhoneNumber>
             {
@@ -64,29 +63,29 @@ namespace LyncSample.Data
             });
         
         /// <summary>
-        /// Calls one ore more phonenumbers.
+        /// Calls one ore more phone numbers.
         /// </summary>
-        /// <param name="phoneNumbers">Phonenumber you want to call.</param>
+        /// <param name="phoneNumbers">Phone number you want to call.</param>
         public static void Call(IReadOnlyCollection<PhoneNumber> phoneNumbers)
         {
             if (phoneNumbers == null || phoneNumbers.Count == 0)
             {
-                throw new InvalidPhoneNumberException("Invalid Argument: No phonenumbers found.");
+                throw new ArgumentException($"{nameof(phoneNumbers)} must not be null or empty");
             }
 
-            var phoneNumbersString = new List<string>();
+            var phoneNumberStrings = new List<string>();
 
-            Parallel.ForEach(phoneNumbers, tel =>
+            Parallel.ForEach(phoneNumbers, p =>
             {
-                if (tel == null)
+                if (p == null)
                 {
-                    throw new InvalidPhoneNumberException("Invalid Argment: Phonenumber is empty.");
+                    throw new InvalidPhoneNumberException("Invalid argument: Phone number is null.");
                 }
 
-                phoneNumbersString.Add(tel.ToLync());
+                phoneNumberStrings.Add(p.ToLync());
             });
 
-            StartCall(phoneNumbersString);
+            StartCall(phoneNumberStrings);
         }
 
         private static void StartCall(IReadOnlyCollection<string> participants)
