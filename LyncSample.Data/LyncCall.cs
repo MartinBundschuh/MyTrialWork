@@ -12,10 +12,10 @@ namespace LyncSample.Data
     /// </summary>
     public static class LyncCall
     {
-        private static LyncClient lyncClient = LyncClient.GetClient();
-        public static bool IsSignedIn = lyncClient != null && lyncClient.State == ClientState.SignedIn;
+        private static readonly LyncClient LyncClient = LyncClient.GetClient();
         
-        #region Call Lync-registered contact(s)
+        public static readonly bool IsSignedIn = LyncClient?.State == ClientState.SignedIn;
+        
         /// <summary>
         /// Starts a phone call with one or more Lync-registered contacts.
         /// </summary>
@@ -23,26 +23,23 @@ namespace LyncSample.Data
         public static void CallRegisteredUser(List<MailAddress> contactMailAddresses)
         {
             if (contactMailAddresses == null || contactMailAddresses.Count == 0)
+            {
                 throw new InvalidEMailException("Invalid Argument: No given E-Mail addresses.");
+            }
 
             var contactMailAddressesString = new List<string>();
 
             Parallel.ForEach(contactMailAddresses, sip =>
+            {
+                if (sip == null)
                 {
-                    if (sip == null)
-                        throw new InvalidEMailException("Invalid Argument: Empty E-Mail addresss.");
+                    throw new InvalidEMailException("Invalid Argument: Empty E-Mail addresss.");
+                }
 
-                    contactMailAddressesString.Add(sip.ToString().Insert(0, "sip:"));
-                });
+                contactMailAddressesString.Add(sip.ToString().Insert(0, "sip:"));
+            });
 
-            try
-            {
-                StartCall(contactMailAddressesString);
-            }
-            catch (NoSuccessfulCallException)
-            {
-                throw;
-            }
+            StartCall(contactMailAddressesString);
         }
 
         /// <summary>
@@ -55,65 +52,56 @@ namespace LyncSample.Data
             kontaktMails.Add(contactMailAddress);
             CallRegisteredUser(kontaktMails);
         }
-        #endregion
 
-        #region Call non-registered contact(s)
-        /// <summary>
-        /// Calls one ore more phonenumbers.
-        /// </summary>
-        /// <param name="phoneNumbers">Phonenumber you want to call.</param>
-        public static void Call(List<PhoneNumber> phoneNumbers)
-        {
-            if (phoneNumbers == null || phoneNumbers.Count == 0)
-                throw new InvalidPhoneNumberException("Invalid Argument: No phonenumbers found.");
-
-            var phoneNumbersString = new List<string>();
-
-            Parallel.ForEach(phoneNumbers, tel =>
-                {
-                    if (tel == null)
-                        throw new InvalidPhoneNumberException("Invalid Argment: Phonenumber is empty.");
-
-                    phoneNumbersString.Add(tel.ToLync());
-                });
-
-            try
-            {
-                StartCall(phoneNumbersString);
-            }
-            catch (NoSuccessfulCallException)
-            {
-                throw;
-            }
-        }
-        
         /// <summary>
         /// Calls a given phonenumber.
         /// </summary>
         /// <param name="phoneNumber">Phonenumber you wat to call.</param>
-        public static void Call(PhoneNumber phoneNumber)
+        public static void Call(PhoneNumber phoneNumber) =>
+            Call(new List<PhoneNumber>
+            {
+                phoneNumber,
+            });
+        
+        /// <summary>
+        /// Calls one ore more phonenumbers.
+        /// </summary>
+        /// <param name="phoneNumbers">Phonenumber you want to call.</param>
+        public static void Call(IReadOnlyCollection<PhoneNumber> phoneNumbers)
         {
-            var phoneNumbers = new List<PhoneNumber>();
-            phoneNumbers.Add(phoneNumber);
-            Call(phoneNumbers);
-        }
-        #endregion
+            if (phoneNumbers == null || phoneNumbers.Count == 0)
+            {
+                throw new InvalidPhoneNumberException("Invalid Argument: No phonenumbers found.");
+            }
 
-        #region Call and Logging
-        private static void StartCall(List<string> participants)
+            var phoneNumbersString = new List<string>();
+
+            Parallel.ForEach(phoneNumbers, tel =>
+            {
+                if (tel == null)
+                {
+                    throw new InvalidPhoneNumberException("Invalid Argment: Phonenumber is empty.");
+                }
+
+                phoneNumbersString.Add(tel.ToLync());
+            });
+
+            StartCall(phoneNumbersString);
+        }
+
+        private static void StartCall(IReadOnlyCollection<string> participants)
         {
             try
             {              
                 if (!IsSignedIn)
-                    throw new NoSuccessfulCallException("Call not possible: Client is not signed in.");               
-                
+                {
+                    throw new NoSuccessfulCallException("Call not possible: Client is not signed in.");
+                }
+
                 var automation = LyncClient.GetAutomation();
                 automation.BeginStartConversation(AutomationModalities.Audio, participants, null, null, automation);
 
-                Parallel.ForEach(participants, uri =>
-                    {
-                        LogCall(uri);
-                    });
+                Parallel.ForEach(participants, LogCall);
             }
             catch (Exception e)
             {
@@ -125,18 +113,15 @@ namespace LyncSample.Data
         {
             var callHistory = new CallHistory
             {
-                CallFrom = lyncClient.Uri,
+                CallFrom = LyncClient.Uri,
                 CallTo = uri,
                 Date = DateTime.Now,
-                IsIntern = lyncClient.ContactManager.GetContactByUri(uri) != null
+                IsIntern = LyncClient.ContactManager.GetContactByUri(uri) != null,
             };
 
-            using (var callHistoryLog = new LyncCallLogging())
-            {
-                callHistoryLog.CallHistory.Add(callHistory);
-                callHistoryLog.SaveChangesAsync();
-            }
+            using var callHistoryLog = new LyncCallLogging();
+            callHistoryLog.CallHistory.Add(callHistory);
+            callHistoryLog.SaveChangesAsync();
         }
-        #endregion
     }
 }

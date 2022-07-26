@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LyncSample.Data
 {
@@ -10,14 +7,13 @@ namespace LyncSample.Data
     /// </summary>
     public class PhoneNumber
     {
-        private int AreaCodeInternational;
-        private int? AreaCode;
-        private int Number;
+        private int _areaCodeInternational;
+        private int? _areaCode;
+        private int _number;
 
-        private string PhoneNumberString;
-        private string PhoneNumberStringSave;
+        private readonly string _phoneNumberString;
+        private readonly string _phoneNumberStringSave;
 
-        #region Constructors
         /// <summary>
         /// Creates the Phone number, International Area Code is set to 41 (CH).
         /// </summary>
@@ -35,11 +31,13 @@ namespace LyncSample.Data
         public PhoneNumber(int areaCodeInternational, int areaCode, int number) 
         {
             if (areaCodeInternational <= 0 || areaCode <= 0 || number <= 0)
+            {
                 throw new InvalidPhoneNumberException("TelefonNr Instance Error: Missing input parameters");
+            }
 
-            AreaCodeInternational = areaCodeInternational;
-            AreaCode = areaCode;
-            Number = number;            
+            _areaCodeInternational = areaCodeInternational;
+            _areaCode = areaCode;
+            _number = number;            
         }
 
         /// <summary>
@@ -48,44 +46,49 @@ namespace LyncSample.Data
         /// <param name="phoneNumber">Phonenumber with international-/ area code e.g.: +41 44 - 688 60 00, default int. area code will be 41 (CH).</param>
         public PhoneNumber(string phoneNumber)
         {
-            try
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                throw new NoSuccessfulCallException("TelefonNr Instance Error: Phone number is empty.");
+
+            _phoneNumberStringSave = phoneNumber;
+            _phoneNumberString = phoneNumber
+                .Replace("(", string.Empty)
+                .Replace(")", string.Empty)
+                .Replace("/", string.Empty)
+                .Replace("-", string.Empty)
+                .Trim();
+
+            if (string.IsNullOrWhiteSpace(_phoneNumberString))
             {
-                if (string.IsNullOrWhiteSpace(phoneNumber))
-                    throw new NoSuccessfulCallException("TelefonNr Instance Error: Phone number is empty.");
-
-                PhoneNumberStringSave = phoneNumber;
-                PhoneNumberString = phoneNumber.Replace("(", string.Empty).Replace(")", string.Empty).Replace("/", string.Empty).Replace("-", string.Empty).Trim();
-
-                if (string.IsNullOrWhiteSpace(PhoneNumberString))
-                    throw new NoSuccessfulCallException("TelefonNr Instance Error: Phone number is empty.");
-
-                if (!PhoneNumberString.StartsWith("+"))
-                {
-                    PhoneNumberString = PhoneNumberString.Substring(0, 2).Equals("00") ? PhoneNumberString.Substring(2, PhoneNumberString.Length - 2) : PhoneNumberString.TrimStart('0').Insert(0, "41");
-                    PhoneNumberString = PhoneNumberString.Insert(0, "+");
-                }
-
-                int.TryParse(phoneNumber.Substring(1, 2), out AreaCodeInternational);
-                // Wont decide between int. and city area code. To Complex and not even necessary to handle
-                AreaCode = null;
-                int.TryParse(phoneNumber.Substring(3, phoneNumber.Length - 3), out Number);
+                throw new NoSuccessfulCallException("TelefonNr Instance Error: Phone number is empty.");
             }
-            catch (Exception)
+
+            if (!_phoneNumberString.StartsWith("+"))
             {
-                throw;
+                _phoneNumberString = _phoneNumberString.Substring(0, 2).Equals("00") 
+                    ? _phoneNumberString.Substring(2, _phoneNumberString.Length - 2) 
+                    : _phoneNumberString.TrimStart('0').Insert(0, "41");
+                _phoneNumberString = _phoneNumberString.Insert(0, "+");
+            }
+
+            if (!int.TryParse(phoneNumber.Substring(1, 2), out _areaCodeInternational)
+                || int.TryParse(phoneNumber.Substring(3, phoneNumber.Length - 3), out _number))
+            {
+                throw new InvalidPhoneNumberException("TelefonNr Instance Error: Invalid format");
             }
         }
-        #endregion
 
-        #region Setter
         /// <summary>
         /// Sets the Internatonal Area Code.
         /// </summary>
         /// <param name="areaCodeInternational">International area code, Format: 0041 or 41 (CH).</param>
         public void SetAreaCodeInternational(int areaCodeInternational)
         {
-            if (areaCodeInternational > 0)
-                AreaCodeInternational = areaCodeInternational;
+            if (areaCodeInternational <= 0)
+            {
+                throw new InvalidPhoneNumberException($"{nameof(areaCodeInternational)} must be grater than 0");
+            }
+            
+            _areaCodeInternational = areaCodeInternational;
         }
 
         /// <summary>
@@ -94,8 +97,12 @@ namespace LyncSample.Data
         /// <param name="areaCode">Area Code, Format: 044 or 44 (Zürich, CH).</param>
         public void SetAreaCode(int areaCode)
         {
-            if (areaCode > 0)
-                AreaCode = areaCode;            
+            if (areaCode <= 0)
+            {
+                throw new InvalidPhoneNumberException($"{nameof(areaCode)} must be grater than 0");
+            }
+            
+            _areaCode = areaCode;
         }
 
         /// <summary>
@@ -103,73 +110,47 @@ namespace LyncSample.Data
         /// </summary>
         /// <param name="number">Number, Format: 6886000.</param>
         public void SetNumber(int number)
-        {            
-            if (number > 0)
-                Number = number;
+        {
+            if (number <= 0)
+            {
+                throw new InvalidPhoneNumberException($"{nameof(number)} must be grater than 0");
+            }
+            
+            _number = number;
         }
-        #endregion
 
-        #region Getter
         /// <summary>
         /// Return the international Area Code, Format 49.
         /// </summary>
         /// <returns>International Area Code, 2 Digits.</returns>
-        public int GetAreaCodeInternational()
-        {
-            return AreaCodeInternational;
-        }
+        public int GetAreaCodeInternational() => _areaCodeInternational;
 
         /// <summary>
         /// Return the Area Code, will be Null if String-Constructor has been used.
         /// </summary>
         /// <returns>Area Code.</returns>
-        public int? GetAreaCode()
-        {
-            return AreaCode;
-        }
+        public int? GetAreaCode() => _areaCode;
 
         /// <summary>
         /// Returns the phoneNumber without international- / area code.
         /// </summary>
         /// <returns>Simple Phone Number.</returns>
-        public int GetNumber()
-        {
-            return Number;
-        }
-        #endregion
+        public int GetNumber() => _number;
 
-        #region ToString / ToLync
         /// <summary>
         /// Returns the whole Phonenumber, Format +44 (0)44 - 6886000.
         /// </summary>
         /// <returns>Frmatted and complete Phonenumber.</returns>
-        public override string ToString()
-        {
-            try
-            {
-                return string.IsNullOrEmpty(PhoneNumberStringSave) ? string.Concat("+", AreaCodeInternational, " (0)", AreaCode, " - ", Number) : PhoneNumberStringSave;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        public override string ToString() => string.IsNullOrEmpty(_phoneNumberStringSave) 
+            ? $"+{_areaCodeInternational} (0){_areaCode} - {_number}"
+            : _phoneNumberStringSave;
 
         /// <summary>
         /// Returns the whole Phonenumber, Format tel:+41446886000.
         /// </summary>
         /// <returns>Returns the whole Phonenumber, Formatted for Lync.</returns>
-        internal string ToLync()
-        {
-            try
-            {
-                return string.IsNullOrEmpty(PhoneNumberString) ? string.Concat("tel:+", AreaCodeInternational, AreaCode, Number) : "tel:" + PhoneNumberString;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        #endregion
+        internal string ToLync() => string.IsNullOrEmpty(_phoneNumberString)
+            ? $"tel:+{_areaCodeInternational}{_areaCode}{_number}"
+            : $"tel:{_phoneNumberString}";
     }
 }

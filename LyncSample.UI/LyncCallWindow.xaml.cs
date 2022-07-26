@@ -34,14 +34,14 @@ namespace LyncSample.UI
 
         private void textBoxPhoneNumber_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (string.Compare(viewModel.PhoneNumber, LyncCallViewModel.textSave, true) == 0)
+            if (string.Compare(viewModel.PhoneNumber, LyncCallViewModel.TextSave, true) == 0)
                 viewModel.PhoneNumber = string.Empty;
         }
 
         private void textBoxPhoneNumber_LostFocus(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(viewModel.PhoneNumber))
-                viewModel.PhoneNumber = LyncCallViewModel.textSave;
+                viewModel.PhoneNumber = LyncCallViewModel.TextSave;
         }
     }
 }

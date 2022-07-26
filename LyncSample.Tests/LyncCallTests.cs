@@ -1,17 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LyncSample.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LyncSample.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class LyncCallTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void CallTest()
         {
             var phoneNumber = new PhoneNumber(44, 6886000);

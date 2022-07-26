@@ -1,17 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LyncSample.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LyncSample.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class PhoneNumberTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void PhoneNumberTest()
         {
             var phoneNumber = new PhoneNumber(44, 6806000);
@@ -19,10 +14,10 @@ namespace LyncSample.Tests
             Assert.IsTrue(phoneNumber != null);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PhoneNumberTestString()
         {
-            var number = "+41 44 - 688 60 00";
+            const string number = "+41 44 - 688 60 00";
             var phoneNumber = new PhoneNumber(number);
             Assert.AreEqual(phoneNumber.GetAreaCodeInternational(), 41);
             Assert.AreEqual(phoneNumber.ToString(), number);
